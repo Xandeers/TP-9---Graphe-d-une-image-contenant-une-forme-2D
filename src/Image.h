@@ -9,7 +9,6 @@ private:
 
     int l;
     int c ; //longueur, colone(largeur) d'une image 
-    int intensiteMax;
     int *tab; //tableau 1d de taille l*c qui contiendra l'image
 
 

@@ -12,11 +12,11 @@ all: $(BIN_DIR)/test
 $(OBJ_DIR)/Image.o: $(SRC_DIR)/Image.cpp $(SRC_DIR)/Image.h 
 	g++ -c -g $(SRC_DIR)/Image.cpp -o $(OBJ_DIR)/Image.o
 
-$(OBJ_DIR)/mainTest.o: $(SRC_DIR)/mainTest.cpp $(SRC_DIR)/Image.h
-	g++ -c -g $(SRC_DIR)/mainTest.cpp -o $(OBJ_DIR)/mainTest.o
+$(OBJ_DIR)/MainTest.o: $(SRC_DIR)/MainTest.cpp $(SRC_DIR)/Image.h
+	g++ -c -g $(SRC_DIR)/MainTest.cpp -o $(OBJ_DIR)/MainTest.o
 
-$(BIN_DIR)/test: $(OBJ_DIR)/mainTest.o $(OBJ_DIR)/Image.o
-	g++ $(OBJ_DIR)/mainTest.o $(OBJ_DIR)/Image.o -o $(BIN_DIR)/test
+$(BIN_DIR)/test: $(OBJ_DIR)/MainTest.o $(OBJ_DIR)/Image.o
+	g++ $(OBJ_DIR)/MainTest.o $(OBJ_DIR)/Image.o -o $(BIN_DIR)/test
 
 
 clean:

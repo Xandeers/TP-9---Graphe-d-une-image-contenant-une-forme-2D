@@ -22,7 +22,7 @@ Image(const string &fichier);//construit une image a partir d'un fichier
 
 void charger_image(const string &fichier);
 
-void testRegression();//fonction qui permettra de savoir si les fonction de la classe marche correctement 
+static void testRegression();//fonction qui permettra de savoir si les fonction de la classe marche correctement 
 
 };
 

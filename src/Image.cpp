@@ -93,7 +93,7 @@ void Image::testRegression(){
     cout<<"test constructeur Image init zero"<<endl;
     Image a; 
     assert(a.c==0 && a.l==0);
-    assert(tab!=nullptr);
+    assert(a.tab!=nullptr);
     cout<<"ok"<<endl;
     cout<<"test charger image"<<endl;
     a.charger_image("//data/image_test_pgm.txt");

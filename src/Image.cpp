@@ -20,38 +20,42 @@ Image::~Image(){
 }
 
 
-void Image::charger_image(const string &fichier){
 
+
+void Image::charger_image(const string &fichier){
+    
   ifstream ifs; //Déclaration d'un objet std::ifstream nommé ifs. Cet objet est utilisé pour lire des données à partir d'un fichier.
   ifs.open(fichier);
   if(ifs.bad()) //verfifie si pas defectueu
-    {cout<<"Impossible d'ouvrir le fichier "<<fichier<<" en lecture \n"; exit(1);}
-
+    {
+        cout<<"Impossible d'ouvrir le fichier "<<fichier<<" en lecture \n";
+        exit(1);
+    }
     string buff_bin; 
     string buff_colone;
     string buff_line; 
     string buff_intensite;
     string buff_tab;
     string bin; //p2
-  
-  
-  ifs >> bin; //lecture du mot 
 
-//verification
-  if (bin != "P2") 
+    //lecture du mot 
+    ifs>>bin;
+    //verification
+   if (bin != "P2") 
     {
         std::cout << "Le fichier n'est pas au format P2 (PGM ASCII)\n"; 
         exit(1);
     }
- //verification si charactere suivant est un commentaire
-  ifs >> buff_colone;
-  if(buff_colone=="#" || buff_colone=="//")
-  {
+    //verification si charactere suivant est un commentaire
+    ifs >> buff_colone;
+    if(buff_colone=="#" || buff_colone=="//")
+    {
     getline(ifs,buff_bin); //get line recupere toute la ligne 
     ifs >> buff_colone;
-  }
-  c= stoi(buff_colone); //c prend pas la valeur du commentaire string to interger
+    }
+    c= stoi(buff_colone); //c prend pas la valeur du commentaire string to interger
 
+    
 //verification si charactere suivant est un commentaire
   ifs>>buff_line; //valeur l et c 
   if(buff_line=="#" || buff_line=="//")
@@ -61,32 +65,32 @@ void Image::charger_image(const string &fichier){
   }
   l=stoi(buff_line);
 
-//verification si charactere suivant est un commentaire
-  ifs >> buff_intensite;; //intensite 
+  //verification si charactere suivant est un commentaire
+  ifs >> buff_intensite; //intensite 
   if(buff_intensite=="#" || buff_intensite=="//")
   {
     getline(ifs,buff_intensite); //ici on se fiche de l'intensite max
     ifs>>buff_intensite;
+   
   }
 
-  //affectation de la taille du graph(tab)
-  tab = new int[c*l];
+  tab=new int[c * l];
 
-//potnetielement ahouter verification si fin de ligne comm !!!!!
-  for(int i=0; i<l;i++)
+  for(int i=0;i<l;i++)
   {
-    for(int j=0; j<c; j++)
+    for(int j=0;j<c;j++)
     {
-        
-       ifs>>tab[j*l+i];
-
+        ifs >>buff_tab;
+        if(buff_tab=="#"|| buff_tab=="//")
+        {
+            getline(ifs,buff_bin);
+            ifs>>buff_tab;
+        }
+        tab[i * c + j ] = stoi(buff_tab);
     }
-
   }
 
-  ifs.close();
 }
-
 void Image::sauvgarder_image(const string &fichier){
   
   std::ofstream ofs;
@@ -94,22 +98,20 @@ void Image::sauvgarder_image(const string &fichier){
   if(ofs.bad()) 
     {cout<<"Impossible d'ouvrir le fichier "<<fichier<<" en ecriture \n"; exit(1);}
     ofs<<"P2"<<" "<<" # PGM ASCII"<<endl;
-    ofs<<c<<" "<<l<<"# Dimensions du graphe C (largeur) et L (hauteur)"<<endl;
-    ofs<<"255"<<" "<<"# Intensité maximale (couleur blanche)"<<endl;
+    ofs<<c<<" "<<l<<" # Dimensions du graphe C (largeur) et L (hauteur)"<<endl;
+    ofs<<"255"<<" "<<" # Intensité maximale (couleur blanche)"<<endl;
     //ecriture du tableau de pixel(graph)
     int buff = 0;
 
-    for(int i=0;i<l;i++)
+    for(int j=0;j<l;j++)
     {
-        for(int j=0; j<c;j++)
+        for(int i=0; i<c;i++)
         {
-            ofs<<tab[buff];
-            if(buff % c == c-1){
-                ofs<<endl;
-            }
-            buff++;
-            
+            ofs<<tab[j*c+i];
+            ofs<< " ";
+
         }
+        ofs<<endl;
     }
 
   ofs.close();
@@ -134,5 +136,7 @@ void Image::testRegression(){
     Image b;
     b.charger_image("./data/image_sauv_test_pgm.txt");
     assert(a.c==b.c && a.l==b.l && b.tab != nullptr);
+    assert(a.tab[0]==b.tab[0]);
+    assert(a.tab[3]==b.tab[3]);
     cout<<"ok"<<endl;
 }

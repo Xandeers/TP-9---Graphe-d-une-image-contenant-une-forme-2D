@@ -17,6 +17,8 @@ Image();//constructeur par defaut
 
 ~Image();//destructeur
 
+void testRegression();//fonction qui permettra de savoir si les fonction de la classe marche correctement 
+
 
 
 };

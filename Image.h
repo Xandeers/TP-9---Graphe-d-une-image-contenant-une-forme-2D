@@ -6,10 +6,12 @@ class Image
 {
 private:
 
-    int l,c ; //longueur, colone(largeur) d'une image 
+    int l;
+    int c ; //longueur, colone(largeur) d'une image 
     int *tab; //tableau 1d de taille l*c qui contiendra l'image
 
 
+public: 
 
 Image();//constructeur par defaut 
 

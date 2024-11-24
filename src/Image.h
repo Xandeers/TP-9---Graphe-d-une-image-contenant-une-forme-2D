@@ -16,11 +16,11 @@ public:
 
 Image();//constructeur par defaut + initialise toutes les valeur a zero 
 
-Image(const string &fichier);//construit une image a partir d'un fichier 
-
 ~Image();//destructeur
 
 void charger_image(const string &fichier);
+
+void sauvgarder_image(const string &fichier);
 
 static void testRegression();//fonction qui permettra de savoir si les fonction de la classe marche correctement 
 

@@ -87,6 +87,35 @@ void Image::charger_image(const string &fichier){
   ifs.close();
 }
 
+void Image::sauvgarder_image(const string &fichier){
+  
+  std::ofstream ofs;
+  ofs.open(fichier);
+  if(ofs.bad()) 
+    {cout<<"Impossible d'ouvrir le fichier "<<fichier<<" en ecriture \n"; exit(1);}
+    ofs<<"P2"<<" "<<" # PGM ASCII"<<endl;
+    ofs<<c<<" "<<l<<"# Dimensions du graphe C (largeur) et L (hauteur)"<<endl;
+    ofs<<"255"<<" "<<"# Intensité maximale (couleur blanche)"<<endl;
+    //ecriture du tableau de pixel(graph)
+    int buff = 0;
+
+    for(int i=0;i<l;i++)
+    {
+        for(int j=0; j<c;j++)
+        {
+            ofs<<tab[buff];
+            if(buff % c == c-1){
+                ofs<<endl;
+            }
+            buff++;
+            
+        }
+    }
+
+  ofs.close();
+} 
+
+
 
 void Image::testRegression(){
 
@@ -99,5 +128,11 @@ void Image::testRegression(){
     a.charger_image("./data/image_test_pgm.txt");
     assert(a.c==3 && a.l == 2);
     assert(a.tab != nullptr);
+    cout<<"ok"<<endl;
+    cout<<"test sauvegarder image"<<endl;
+    a.sauvgarder_image("./data/image_sauv_test_pgm.txt");
+    Image b;
+    b.charger_image("./data/image_sauv_test_pgm.txt");
+    assert(a.c==b.c && a.l==b.l && b.tab != nullptr);
     cout<<"ok"<<endl;
 }

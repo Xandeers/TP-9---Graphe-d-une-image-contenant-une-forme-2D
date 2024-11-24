@@ -13,7 +13,7 @@ private:
 
 public: 
 
-Image();//constructeur par defaut 
+Image();//constructeur par defaut + initialise toutes les valeur a zero 
 
 ~Image();//destructeur
 

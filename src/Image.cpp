@@ -160,7 +160,7 @@ int* Image::tab_dist(){
     }
     return dist;
 }
-/**
+/** 
 void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
     int nord;
@@ -176,7 +176,14 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
     for(int i=0;i<l*c;i++){
         //calcule voisin 
         if(tab[i]==0){
-
+            nord=i-c;
+            sud=i+c;
+            est=i+1;
+            ouest=i-1;
+            nord_est=i-c+1;
+            nord_ouest=i-c-1;
+            sud_est=i+c+1;
+            sud_ouest=i+c-1;
         }
 
     }

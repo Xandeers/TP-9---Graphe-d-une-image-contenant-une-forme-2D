@@ -10,16 +10,22 @@ using namespace std;
  * @date 2024
  */
 
+ enum Etiquette {
+    Noir =0,   // 0
+    Gris =1,   // 1
+    Blanc =2,   // 2
+};
+
 /**
- * @class Punchman
+ * @class Image
 */
 class Image
 {
 private:
 
-    int l;
-    int c ; //longueur, colone(largeur) d'une image 
-    int *tab; //tableau 1d de taille l*c qui contiendra l'image
+    int l; /**<longueur d'une image  */
+    int c ;  /**<colone(largeur) d'une image  */
+    int *tab; /**<tableau 1d de taille l*c qui contiendra l'image */
 
 
 public: 
@@ -51,7 +57,36 @@ void sauvgarder_image(const string &fichier);
  * @param indice est l'indice du pixel que l'on traite 
  * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
  */
-int voisin(const int &indice);
+int voisin (const int &indice);
+
+
+/**
+ * @brief fonction qui construit et va renvoyer un tableau de predecesseur pour savoir quelle est le noeud precedant dans le plus cour chemin 
+ * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete les valeur dans ce tab sont des int pour representer l'indice ou se trouve le pixel predesseur 
+ */
+int* tab_pred();
+
+/**
+ * @brief fonction qui construit et va renvoyer un tableau d'etat donc pour savoir si un noeud appartient a la forme ou non en utilisant un type etiquette
+ * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete
+ */
+Etiquette* tab_etat();
+
+/**
+ * @brief fonction qui construit et va renvoyer un tableau de distance pour savoir la distance entre les pixel noir et blanc 
+ * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete les valeur dans ce tab sont des int pour representer l'indice ou se trouve le pixel predesseur 
+ */
+int* tab_dist();
+
+/**
+ * @brief procedure qui modifier les valeur des tableau pris en parametre en utilisant le principe de l'alogorithme de dijkstra 
+ * @param dist il s'agit d'un pointeur sur un tableau de int dans le tas qui correspond au valeur la plus petite de la distance entre le pixel et le pixel noir le plus proche 
+ * @param etiquette il s'agit d'un pointeur sur un tableau d' "etiquette" enum qui a été cree pour identifier les pixelle viste accessible (voir cm) le tab est stoquer dans le tas 
+ * @param pred il s'agit d'un tab de predesseur qui donne quelle est le noeud precedant dans le plus cour chemin 
+ * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete les valeur dans ce tab sont des int pour representer l'indice ou se trouve le pixel predesseur 
+ */
+void algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred);
+
 
 /**
 * @brief Effectue une série de tests vérifiant que toutes les fonctions fonctionnent et font bien ce qu’elles sont censées faire, ainsi que les données membres de l'objet sont conformes

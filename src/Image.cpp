@@ -117,20 +117,87 @@ void Image::sauvgarder_image(const string &fichier){
   ofs.close();
 } 
 
+Etiquette* Image::tab_etat(){
 
+    Etiquette* etats= new Etiquette[l*c];
 
+    for (int i=0; i<l*c;i++){
+        if(tab[i]==0){
+            etats[i]= Noir;
+        }
+        else{
+            etats[i]=Blanc;
+        }
+    }
+    return etats;
+}
+
+int* Image::tab_pred(){
+
+    int* pred=new int[l*c];
+    for (int i=0; i<l*c;i++){
+        if(tab[i]==0){
+            pred[i]= i;
+        }
+        else{
+            pred[i]=-1;
+        }
+    }
+    return pred;
+
+}
+
+int* Image::tab_dist(){
+    
+    int* dist=new int[l*c];
+    for (int i=0;i<l*c;i++){
+        if(tab[i]==0){
+            dist[i]= 0;
+        }
+        else{
+            dist[i]=-1;
+        }
+    }
+    return dist;
+}
+/**
+void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
+
+    int nord;
+    int sud;
+    int est;
+    int ouest;
+    int nord_est;
+    int nord_ouest;
+    int sud_est;
+    int sud_ouest;
+    //parcour du tableau 
+
+    for(int i=0;i<l*c;i++){
+        //calcule voisin 
+        if(tab[i]==0){
+
+        }
+
+    }
+}
+*/
 void Image::testRegression(){
 
     cout<<"test constructeur Image init zero"<<endl;
     Image a; 
     assert(a.c==0 && a.l==0);
     assert(a.tab!=nullptr);
-    cout<<"ok"<<endl;
+    cout<<"ok"<<endl<<endl;
+
+
     cout<<"test charger image"<<endl;
     a.charger_image("./data/image_test_pgm.txt");
     assert(a.c==3 && a.l == 2);
     assert(a.tab != nullptr);
-    cout<<"ok"<<endl;
+    cout<<"ok"<<endl<<endl;
+
+
     cout<<"test sauvegarder image"<<endl;
     a.sauvgarder_image("./data/image_sauv_test_pgm.txt");
     Image b;
@@ -138,5 +205,28 @@ void Image::testRegression(){
     assert(a.c==b.c && a.l==b.l && b.tab != nullptr);
     assert(a.tab[0]==b.tab[0]);
     assert(a.tab[3]==b.tab[3]);
-    cout<<"ok"<<endl;
+    cout<<"ok"<<endl<<endl;
+
+
+    cout<<"test etiquette pour algo dijktra"<<endl;
+    Etiquette* test = a.tab_etat();
+    assert(test[0]== Blanc);
+    assert(test[4]==Noir);
+    delete[]test;
+    cout<<"ok"<<endl<<endl;
+
+
+    cout<<"test predecesseur pour algo dijktra"<<endl;
+    int* test2 = a.tab_pred();
+    assert(test2[0]==-1 );
+    assert(test2[4]==4);
+    delete[]test2;
+    cout<<"ok"<<endl<<endl;
+
+    cout<<"test dist pour algo dijktra"<<endl;
+    int* test3 = a.tab_dist();
+    assert(test3[0]==-1 );
+    assert(test3[4]==0);
+    delete[]test3;
+    cout<<"ok"<<endl<<endl;
 }

@@ -2,4 +2,4 @@ P2  # PGM ASCII
 3 2 # Dimensions du graphe C (largeur) et L (hauteur)
 255  # Intensité maximale (couleur blanche)
 12 34 5 
-67 80 1 
+67 0 1 

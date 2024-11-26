@@ -57,7 +57,32 @@ void sauvgarder_image(const string &fichier);
  * @param indice est l'indice du pixel que l'on traite 
  * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
  */
-int voisin (const int &indice);
+int getNord (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getSud (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getouest (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getest (const int &indice);
+
 
 
 /**

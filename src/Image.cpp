@@ -116,7 +116,39 @@ void Image::sauvgarder_image(const string &fichier){
 
   ofs.close();
 } 
+/** 
+int Image::getNord(const int &indice){
+    if( indice - c>=0){
+        return indice-c;
+    }
+    else{
+        return -1;
+    }
+}
 
+int Image::getSud(const int &indice){
+    if( indice + c<l){
+        return indice+c;
+    }
+    else{
+        return -1;
+    }
+}
+
+int Image::getouest(const int &indice){
+    if( indice -1 <){
+        return indice+c;
+    }
+    else{
+        return -1;
+    }
+}
+
+
+int Image::getest(const int &indice){
+
+}
+*/
 Etiquette* Image::tab_etat(){
 
     Etiquette* etats= new Etiquette[l*c];

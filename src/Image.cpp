@@ -116,7 +116,7 @@ void Image::sauvgarder_image(const string &fichier){
 
   ofs.close();
 } 
-/** 
+
 int Image::getNord(const int &indice){
     if( indice - c>=0){
         return indice-c;
@@ -127,7 +127,7 @@ int Image::getNord(const int &indice){
 }
 
 int Image::getSud(const int &indice){
-    if( indice + c<l){
+    if( indice + c<l*c){
         return indice+c;
     }
     else{
@@ -136,7 +136,7 @@ int Image::getSud(const int &indice){
 }
 
 int Image::getouest(const int &indice){
-    if( indice -1 <){
+    if( indice % c !=0){ //alors il a un voisin ouest 
         return indice+c;
     }
     else{
@@ -146,9 +146,16 @@ int Image::getouest(const int &indice){
 
 
 int Image::getest(const int &indice){
-
+ if( indice % c != c-1){
+    return indice +1;
+ }
+ else{
+    return -1;
+ }
 }
-*/
+
+
+
 Etiquette* Image::tab_etat(){
 
     Etiquette* etats= new Etiquette[l*c];
@@ -192,7 +199,7 @@ int* Image::tab_dist(){
     }
     return dist;
 }
-/** 
+
 void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
     int nord;
@@ -208,10 +215,11 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
     for(int i=0;i<l*c;i++){
         //calcule voisin 
         if(tab[i]==0){
-            nord=i-c;
-            sud=i+c;
-            est=i+1;
-            ouest=i-1;
+            nord= getNord(i);
+            sud=getSud(i);
+            est=getest(i);
+            ouest=getouest(i);
+
             nord_est=i-c+1;
             nord_ouest=i-c-1;
             sud_est=i+c+1;
@@ -220,7 +228,7 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
     }
 }
-*/
+
 void Image::testRegression(){
 
     cout<<"test constructeur Image init zero"<<endl;
@@ -262,10 +270,24 @@ void Image::testRegression(){
     delete[]test2;
     cout<<"ok"<<endl<<endl;
 
+
     cout<<"test dist pour algo dijktra"<<endl;
     int* test3 = a.tab_dist();
     assert(test3[0]==-1 );
     assert(test3[4]==0);
     delete[]test3;
     cout<<"ok"<<endl<<endl;
+
+
+    cout<<"test calcule des voisin"<<endl;
+    int nord =a.getNord(0);
+    int sud=a.getSud(0);
+    int ouest=a.getouest(0);
+    int est=a.getest(0); 
+    assert(nord==-1);
+    assert(sud== 0+ a.c);
+    assert(ouest == -1);
+    assert(est==1);
+    cout<<"ok"<<endl<<endl;
+
 }

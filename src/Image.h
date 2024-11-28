@@ -84,6 +84,37 @@ int getouest (const int &indice);
 int getest (const int &indice);
 
 
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getnord_est (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getnord_ouest (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getsud_est (const int &indice);
+
+
+/**
+ * @brief fonction qui calcule le voisin ...
+ * @param indice est l'indice du pixel que l'on traite 
+ * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
+ */
+int getsud_ouest (const int &indice);
+
 
 /**
  * @brief fonction qui construit et va renvoyer un tableau de predecesseur pour savoir quelle est le noeud precedant dans le plus cour chemin 

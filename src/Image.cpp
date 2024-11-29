@@ -128,44 +128,6 @@ void Image::sauvgarder_image(const string &fichier){
   ofs.close();
 } 
 
-int Image::getNord(const int &indice){
-    if( indice - c>=0){
-        return indice-c;
-    }
-    else{
-        return -1;
-    }
-}
-
-int Image::getSud(const int &indice){
-    if( indice + c<l*c){
-        return indice+c;
-    }
-    else{
-        return -1;
-    }
-}
-
-int Image::getouest(const int &indice){
-    if( indice % c !=0){ //alors il a un voisin ouest 
-        return indice+c;
-    }
-    else{
-        return -1;
-    }
-}
-
-
-int Image::getest(const int &indice){
- if( indice % c != c-1){
-    return indice +1;
- }
- else{
-    return -1;
- }
-}
-
-
 
 Etiquette* Image::tab_etat(){
 
@@ -237,13 +199,13 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
      int buff_dist = actuel.dist;
     int buff_index = actuel.index;
 
-    // Si déjà visité, continuer
+    // Si  visite continuer
      if (etiquette[buff_index] ==Gris)
      {
      continue;
      }
      else{
-        // Marquer comme visité
+        // Marquer comme vu
         etiquette[buff_index] =Gris;
      }
      // Convertir l'index en coordonnées 2D
@@ -255,51 +217,45 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
             int nx = x + dx[i];
             int ny = y + dy[i]; 
 
-             // Vérifier si les coordonnées sont valides
+             // verif si les coordone sont ok 
             if (nx >= 0 && nx < c && ny >= 0 && ny < l) {
-                int voisin_index = ny * c + nx; // Index 1D du voisin
+                int voisin_index = ny * c + nx; //index 1d voisin
                 int nouv_dist = buff_dist + costs[i];
 
                 if (nouv_dist < dist[voisin_index]) {
-                    dist[voisin_index] = nouv_dist; // Mettre à jour la distance
-                    pred[voisin_index] = buff_index; // Enregistrer le prédécesseur
-                    pq.push(Noeud{nouv_dist, voisin_index}); // Ajouter à la file
+                    dist[voisin_index] = nouv_dist; // actualise le distance
+                    pred[voisin_index] = buff_index; // sauvegarde le pred
+                    pq.push(Noeud{nouv_dist, voisin_index}); // Ajouter 
 
         }
     }
    }
   }
 }
-/** 
-void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
-    int nord;
-    int sud;
-    int est;
-    int ouest;
-    int nord_est;
-    int nord_ouest;
-    int sud_est;
-    int sud_ouest;
-    //parcour du tableau 
+void Image::construction_image_dist(int* &dist, Etiquette* &etiquette, int* &pred){
 
-    for(int i=0;i<l*c;i++){
-        //calcule voisin 
-        if(tab[i]==0){
-            nord= getNord(i);
-            sud=getSud(i);
-            est=getest(i);
-            ouest=getouest(i);
-
-            nord_est=i-c+1;
-            nord_ouest=i-c-1;
-            sud_est=i+c+1;
-            sud_ouest=i+c-1;
+  // Trouver la distance max
+    int maxDist = 0;
+    for (int i = 0; i < l * c; i++) {
+        if (dist[i] > maxDist) {
+            maxDist = dist[i];
         }
+    }
 
+    // Si la distance max est ok alors normaliser les pixels
+    if (maxDist > 0) {
+        for (int i = 0; i < l * c; i++) {
+            if (dist[i] == maxDist) {
+                tab[i] = 255; // pixel avec dist max
+            } else if (dist[i] != 0) {
+                tab[i] = (dist[i] * 255) / maxDist; 
+            }
+        }
     }
 }
-*/
+
+
 void Image::testRegression(){
 
     cout<<"test constructeur Image init zero"<<endl;
@@ -363,6 +319,26 @@ void Image::testRegression(){
      delete []dist;
      delete []etiq;
      delete []pred; 
+
     cout<<"ok"<<endl<<endl; //pas de assert mais verifier plusieur fois avec des tab de taille diff
+
+
+    cout<<"test construction image distance"<<endl;
+    Image d;
+    d.charger_image("./data/test2_img_dist.pgm");
+    int* dist2=d.tab_dist();
+    int* pred2=d.tab_pred();
+    Etiquette* etiq2=d.tab_etat();
+    d.algorithme_dijkstra(dist2,etiq2,pred2);
+    d.construction_image_dist(dist2,etiq2,pred2);
+    d.sauvgarder_image("./data/test.pgm");
+    //d.sauvgarder_image("./data/image_sauv_test_pgm.txt");
+     delete []dist2;
+     delete []etiq2;
+     delete []pred2; 
+    
+
+
+
 }
     

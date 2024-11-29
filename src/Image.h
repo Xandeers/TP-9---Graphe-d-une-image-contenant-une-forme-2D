@@ -54,70 +54,6 @@ void charger_image(const string &fichier);
 void sauvgarder_image(const string &fichier);
 
 /**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getNord (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getSud (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getouest (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getest (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getnord_est (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getnord_ouest (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getsud_est (const int &indice);
-
-
-/**
- * @brief fonction qui calcule le voisin ...
- * @param indice est l'indice du pixel que l'on traite 
- * @return un int qui correspond a l'indice dans le tableau 1d du voisin en question 
- */
-int getsud_ouest (const int &indice);
-
-
-/**
  * @brief fonction qui construit et va renvoyer un tableau de predecesseur pour savoir quelle est le noeud precedant dans le plus cour chemin 
  * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete les valeur dans ce tab sont des int pour representer l'indice ou se trouve le pixel predesseur 
  */
@@ -146,6 +82,10 @@ int* tab_dist();
 void algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred);
 
 
+/**
+ * @brief cette procedure est la procedure qui appeler toute les autre fonction afin de pouvoir cree l'image de distance elle va donc nous cree les tableau et aussi utiliser l'algorithme de dijkstra pour modifier les valeur des pixel 
+ */
+void construction_image_dist(int* &dist, Etiquette* &etiquette, int* &pred);
 /**
 * @brief Effectue une série de tests vérifiant que toutes les fonctions fonctionnent et font bien ce qu’elles sont censées faire, ainsi que les données membres de l'objet sont conformes
 */

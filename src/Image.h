@@ -16,6 +16,7 @@ using namespace std;
     Blanc =2,   // 2
 };
 
+
 /**
  * @class Image
 */
@@ -133,6 +134,7 @@ Etiquette* tab_etat();
  * @return un pointeur qui pointe sur un tableau dans le tas  attention ne pas oublier le delete les valeur dans ce tab sont des int pour representer l'indice ou se trouve le pixel predesseur 
  */
 int* tab_dist();
+
 
 /**
  * @brief procedure qui modifier les valeur des tableau pris en parametre en utilisant le principe de l'alogorithme de dijkstra 

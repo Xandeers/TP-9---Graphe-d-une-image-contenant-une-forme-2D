@@ -1,9 +1,20 @@
 #include<iostream>
 #include <fstream>
 #include<cassert>
+#include<queue>
 #include"Image.h"
 
 using namespace std; 
+
+struct Noeud {
+    int dist;   // Distance
+    int index;  // Index du pixel
+
+    // Comparateur pour la file de priorité (ordre croissant sur la distance)
+ bool operator>(const Noeud& other) const {
+        return dist > other.dist;
+    }
+};
 
 Image::Image(){
 
@@ -194,12 +205,72 @@ int* Image::tab_dist(){
             dist[i]= 0;
         }
         else{
-            dist[i]=-1;
+            dist[i]=100000;
         }
     }
     return dist;
 }
 
+
+void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
+
+     // File de priorité pour Dijkstra (stocke l'index du pixel et sa distance). Ils sont triés dans l'ordre croissant selon le premier élément de la paire (grâce à std::greater).
+       priority_queue<Noeud,vector<Noeud>, greater<Noeud>> pq; 
+
+    //initialisation de la file de prio on ajoute les pixel noir avec leur distance connu a 0
+    for(int i=0; i<l*c;i++){
+        if(tab[i]==0){
+            pq.push(Noeud{0,i});
+        }
+    }
+    // Déplacements possibles (horizontal, vertical, diagonal)
+    const int dx[] = {-1, 1, 0, 0, -1, -1, 1, 1};
+    const int dy[] = {0, 0, -1, 1, -1, 1, -1, 1};
+    const int costs[] = {2, 2, 2, 2, 3, 3, 3, 3}; 
+
+    // Boucle principale de l'algorithme
+    while (!pq.empty()) {
+        // Extraire le pixel avec la plus petite distance
+        Noeud actuel = pq.top();
+        pq.pop();
+    
+     int buff_dist = actuel.dist;
+    int buff_index = actuel.index;
+
+    // Si déjà visité, continuer
+     if (etiquette[buff_index] ==Gris)
+     {
+     continue;
+     }
+     else{
+        // Marquer comme visité
+        etiquette[buff_index] =Gris;
+     }
+     // Convertir l'index en coordonnées 2D
+        int x = buff_index % c; // Colonne
+        int y = buff_index / c; // Ligne
+
+    // calcul des voisin 
+        for (int i = 0; i < 8; ++i) {
+            int nx = x + dx[i];
+            int ny = y + dy[i]; 
+
+             // Vérifier si les coordonnées sont valides
+            if (nx >= 0 && nx < c && ny >= 0 && ny < l) {
+                int voisin_index = ny * c + nx; // Index 1D du voisin
+                int nouv_dist = buff_dist + costs[i];
+
+                if (nouv_dist < dist[voisin_index]) {
+                    dist[voisin_index] = nouv_dist; // Mettre à jour la distance
+                    pred[voisin_index] = buff_index; // Enregistrer le prédécesseur
+                    pq.push(Noeud{nouv_dist, voisin_index}); // Ajouter à la file
+
+        }
+    }
+   }
+  }
+}
+/** 
 void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
     int nord;
@@ -228,7 +299,7 @@ void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
     }
 }
-
+*/
 void Image::testRegression(){
 
     cout<<"test constructeur Image init zero"<<endl;
@@ -273,21 +344,25 @@ void Image::testRegression(){
 
     cout<<"test dist pour algo dijktra"<<endl;
     int* test3 = a.tab_dist();
-    assert(test3[0]==-1 );
+    assert(test3[0]==100000 );
     assert(test3[4]==0);
     delete[]test3;
     cout<<"ok"<<endl<<endl;
 
 
-    cout<<"test calcule des voisin"<<endl;
-    int nord =a.getNord(0);
-    int sud=a.getSud(0);
-    int ouest=a.getouest(0);
-    int est=a.getest(0); 
-    assert(nord==-1);
-    assert(sud== 0+ a.c);
-    assert(ouest == -1);
-    assert(est==1);
-    cout<<"ok"<<endl<<endl;
-
+    cout<<"test disjsktra"<<endl;
+    Image c; 
+    c.charger_image("./data/test.pgm"); 
+    int *dist=c.tab_dist();
+   Etiquette* etiq= c.tab_etat();
+    int* pred=c.tab_pred();
+    c.algorithme_dijkstra(dist,etiq,pred);
+    for(int i =0; i<c.l* c.c;i++){
+        cout<<"indice "<<i<<"= "<<dist[i]<<'\t'<<"pred ="<<pred[i]<<endl;
+     }
+     delete []dist;
+     delete []etiq;
+     delete []pred; 
+    cout<<"ok"<<endl<<endl; //pas de assert mais verifier plusieur fois avec des tab de taille diff
 }
+    

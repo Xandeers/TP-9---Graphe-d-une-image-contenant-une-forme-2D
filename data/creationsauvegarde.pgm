@@ -3,4 +3,4 @@ P2  # PGM ASCII
 255  # Intensité maximale (couleur blanche)
 255 255 255 255 255 
 255 255 255 255 0 
-255 0 255 255 255 
+255 255 255 255 255 

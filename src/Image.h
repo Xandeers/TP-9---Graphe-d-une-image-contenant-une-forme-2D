@@ -16,6 +16,14 @@ using namespace std;
     Blanc =2,   // 2
 };
 
+ enum forme {
+    
+    vide=0,   // 0
+    rectangle =1,   // 1
+    croix =2,
+};
+
+
 
 /**
  * @class Image
@@ -46,6 +54,10 @@ Image(int x, int y);
  */
 ~Image();//destructeur
 
+/**
+ * @brief modifie la taille du tab de l'image
+ */
+void set_tab(const int &l, const int &c);
 /**
  * @brief permet de charger une image donc a partir d'une image on remplis le tableau 1d de pixel avec leur valeur attention le fichier doit etre avec le sigle P2 sinon il ne sera pas traité
  * @param fichier est le fichier que l'on va charger 
@@ -114,7 +126,7 @@ int projection(const int &indice,int* &pred);
  * @param pred il s'agit du pointeur sur le tableau de predecesseur qui est stoquer dans le tas  
  * @return l'indice du pixel de la forme le plus proche et si le pixel appartient deja a la forme alors il renvoit son indice 
  */
-int projectionX_Y(const int &X,const int &Y,int* &pred);
+int projection(const int &X,const int &Y,int* &pred);
 
 /**
  * @brief fonction qui nous dit si il s'agit d'une image de distance sera tres utile pour l'union car on la calcule avec une image de distance et cela permet de savoir si on a besoin de calculer l'image de distance 
@@ -128,6 +140,35 @@ bool img_de_dist();
  * @return retourne une nouvelle image DE DISTANCE qui est constituer de l'union des deux 
  */
 Image union_image(Image &b);
+
+/**
+ * @brief fonction qui a partir de deux image ou les tableau ont deja été cree sans calculer l'algo de drijska on fait l'union des deux 
+ * @param dist il s'agit du tableau de distance de l'image 1  
+ * @param etiquette il s'agit du tableau d'etat de l'image 1
+ * @param pred il s'agit du tableau de predecesseur de l'image 1
+ * @param dist2 il s'agit du tableau de distance de l'image 2  
+ * @param etiquette2 il s'agit du tableau d'etat de l'image 2
+ * @param pred2 il s'agit du tableau de predecesseur de l'image 2
+ */
+Image union_image(int* &dist, Etiquette* &etiquette, int* &pred,int* &dist2, Etiquette* &etiquette2, int* &pred2);
+
+/**
+ * @brief procedure qui transforme l'image de distance en image d'origine 
+ */
+void retour_origine();
+
+
+/**
+ * @brief precedure qui cree une image avec une forme au choix on choisie aussi les dimension (utile pour le menu )
+ * @param x il s'agit de la longueur l de l'image 
+ * @param y il s'agit de la longueur c de l'image 
+ * @param posx il s'agit de la position x du centre de la forme 
+ * @param posy il s'agit de la position y du centre de la forme 
+ * @param a il s'agit de la forme choisi par l'utilisateur 
+ * @param largeur il s'agit de la longueur de la forme
+ * @param hauteur il s'agit de la hauteur de la forme
+ */
+void cree_forme(const int &posx,const int &posy, forme a, int longeur,int hauteur);
 
 /**
 * @brief Effectue une série de tests vérifiant que toutes les fonctions fonctionnent et font bien ce qu’elles sont censées faire, ainsi que les données membres de l'objet sont conformes

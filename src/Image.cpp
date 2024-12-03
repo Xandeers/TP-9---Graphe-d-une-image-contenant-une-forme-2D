@@ -1,8 +1,8 @@
 #include<iostream>
-#include <fstream>
+#include<fstream>
 #include<cassert>
 #include<queue>
-#include <algorithm>
+#include<algorithm>
 #include"Image.h"
 
 using namespace std; 
@@ -21,13 +21,16 @@ Image::Image(){
 
     l=0;
     c=0;
-    tab=new int[0];
+    tab=nullptr;
 }
 
 Image::Image(int x, int y){
     l=x;
     c=y;
     tab=new int[l*c];
+    for(int i=0;i<l*c;i++){
+        tab[i]=255;
+    }
 }
 
 Image::~Image(){
@@ -35,6 +38,12 @@ Image::~Image(){
     if(tab!=nullptr){
         delete []tab;
     }
+}
+
+
+void Image::set_tab(const int &l, const int &c){
+
+    tab = new int[l*c];    
 }
 
 void Image::charger_image(const string &fichier){
@@ -109,7 +118,7 @@ void Image::charger_image(const string &fichier){
 
 void Image::sauvgarder_image(const string &fichier){
   
-  std::ofstream ofs;
+  ofstream ofs;
   ofs.open(fichier);
   if(ofs.bad()) 
     {cout<<"Impossible d'ouvrir le fichier "<<fichier<<" en ecriture \n"; exit(1);}
@@ -281,7 +290,7 @@ else{
 }
 }
 
-int Image::projectionX_Y(const int &X, const int &Y, int* &pred){
+int Image::projection(const int &X, const int &Y, int* &pred){
 
     return projection(X*c+Y,pred);
 }
@@ -341,6 +350,66 @@ Image Image::union_image(Image &b){
    return uni;
 }
 
+Image Image::union_image(int* &dist, Etiquette* &etiquette, int* &pred,int* &dist2, Etiquette* &etiquette2, int* &pred2){
+
+    //donc on a deja dijkstra qui a été calculer et les tableau deja remplis 
+    Image add (l,c);
+
+     for (int i=0;i<l*c;i++){
+        if(dist[i]==0 || dist2[i]==0){ //donc un pixel est noir 
+            add.tab[i]=0;
+        }
+        else{
+            add.tab[i]=min(dist[i],dist2[i]);//en attendant tab de i prend la dist 
+        }
+     }
+     int buff=0;
+      for (int i = 0; i < l * c; i++) {
+        if (dist[i] > buff) {
+            buff = dist[i];
+        } 
+        //on a la distance max on peu maintenant normaliser 
+    }
+    for(int i=0;i<l*c;i++){
+        add.tab[i]=(add.tab[i]*255)/buff;
+    }
+    return add;
+
+    
+     
+     
+
+}
+
+void Image::retour_origine(){
+
+    for(int i=0;i<l*c;i++){
+        if(tab[i]!=0){
+            tab[i]=255;
+        }
+    }
+}
+
+void Image::cree_forme(const int &posx,const int &posy, forme a, int longueur,int hauteur){
+
+     if (a == rectangle) {
+        // Parcourir les pixels correspondant au rectangle
+        for (int i = 0; i < longueur; i++) {
+            for (int j = 0; j < hauteur; j++) {
+                // Calculer les coordonnées globales
+                int x = posx + i; // Déplacement horizontal
+                int y = posy + j; // Déplacement vertical
+
+                // Vérifier que les coordonnées sont dans les limites de l'image
+                if (x >= 0 && x < c && y >= 0 && y < l) {
+                    tab[y * c + x] = 0; // Remplir le pixel avec noir
+                }
+            }
+        }
+    }
+}
+    
+
 
 void Image::testRegression(){
 
@@ -360,8 +429,10 @@ void Image::testRegression(){
 
     cout<<"test sauvegarder image"<<endl;
     a.sauvgarder_image("./data/image_sauv_test_pgm.txt");
+    a.sauvgarder_image("./data/creationsauvegarde.pgm");
     Image b;
     b.charger_image("./data/image_sauv_test_pgm.txt");
+    
     assert(a.c==b.c && a.l==b.l && b.tab != nullptr);
     assert(a.tab[0]==b.tab[0]);
     assert(a.tab[3]==b.tab[3]);
@@ -439,7 +510,7 @@ void Image::testRegression(){
 
 
     cout<<"Test projection de pixel X et Y"<<endl;
-    int coordoner = x.projectionX_Y(6,9,pred3);
+    int coordoner = x.projection(6,9,pred3);
     assert(coordoner==190);
     cout<<"ok"<<endl<<endl;
     delete []dist3;
@@ -468,9 +539,26 @@ void Image::testRegression(){
     Image union_forme= n.union_image(m);
     assert(union_forme.tab[9]==0 && union_forme.tab[11]==0);
     union_forme.sauvgarder_image("./data/image_union_dist.pgm");
+    int* dista2=n.tab_dist();
+    int* prede2=n.tab_pred();
+    Etiquette* etiqe2=n.tab_etat();
+    int* dista3=m.tab_dist();
+    int* prede3=m.tab_pred();
+    Etiquette* etiqe3=m.tab_etat();
+    Image union_forme2=n.union_image(dista2,etiqe2,prede2,dista3,etiqe3,prede3);
+    assert(union_forme2.tab[9]==0 && union_forme2.tab[11]==0);
+    union_forme2.sauvgarder_image("./data/image_union_dist.pgm");
     cout<<"ok"<<endl;
 
+            /////////////////////////// C'est fonction sont la pour le menu///////////////////////////
 
+    cout<<"test creation d'image"<<endl;
+    int x1=15;
+    int y1= 15; 
+    Image crea(x1,y1);
+    crea.cree_forme(0,0,rectangle,10,5);
+    crea.sauvgarder_image("./data/creation_test.pgm");
 
+    
 }
     

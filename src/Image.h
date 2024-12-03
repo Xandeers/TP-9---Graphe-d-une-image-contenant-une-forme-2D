@@ -36,6 +36,12 @@ public:
 Image();
 
 /**
+ * @brief il s'agit du constructeur par defaut + initialise toutes les valeur a zero 
+ */
+Image(int x, int y);
+
+
+/**
  * @brief il s'agit du destructeur 
  */
 ~Image();//destructeur
@@ -86,6 +92,43 @@ void algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred);
  * @brief cette procedure est la procedure qui appeler toute les autre fonction afin de pouvoir cree l'image de distance elle va donc nous cree les tableau et aussi utiliser l'algorithme de dijkstra pour modifier les valeur des pixel 
  */
 void construction_image_dist(int* &dist, Etiquette* &etiquette, int* &pred);
+
+
+/**
+ * @brief procedure qui permet de sauvegarder une image de distance elle verifira que cette img est bien un image de distance 
+ */
+void sauv_img_dist(const string &fichier);
+
+/**
+ * @brief fonction qui a partir d'une image de distance prend un pixel et nous donne le pixel appartenant a la forme le plus proche du pixel 
+ * @param indice il s'agit de l'indice du pixel de l'image
+ * @param pred il s'agit du pointeur sur le tableau de predecesseur qui est stoquer dans le tas  
+ * @return l'indice du pixel de la forme le plus proche et si le pixel appartient deja a la forme alors il renvoit son indice 
+ */
+int projection(const int &indice,int* &pred);
+
+/**
+ * @brief fonction qui a partir d'une image de distance prend un pixel et nous donne le pixel appartenant a la forme le plus proche du pixel 
+ * @param indiceX il s'agit de l'indice X du pixel de l'image
+ * @param indiceY il s'agit de l'indice Y du pixel de l'image
+ * @param pred il s'agit du pointeur sur le tableau de predecesseur qui est stoquer dans le tas  
+ * @return l'indice du pixel de la forme le plus proche et si le pixel appartient deja a la forme alors il renvoit son indice 
+ */
+int projectionX_Y(const int &X,const int &Y,int* &pred);
+
+/**
+ * @brief fonction qui nous dit si il s'agit d'une image de distance sera tres utile pour l'union car on la calcule avec une image de distance et cela permet de savoir si on a besoin de calculer l'image de distance 
+ * @return un booleen 
+ */
+bool img_de_dist();
+
+/**
+ * @brief fonction qui cree une image qui est l'union de deux image donc l'union de deux forme 
+ * @param b est la deuxieme image avec laquelle on va faire l'union des deux formes 
+ * @return retourne une nouvelle image DE DISTANCE qui est constituer de l'union des deux 
+ */
+Image union_image(Image &b);
+
 /**
 * @brief Effectue une série de tests vérifiant que toutes les fonctions fonctionnent et font bien ce qu’elles sont censées faire, ainsi que les données membres de l'objet sont conformes
 */

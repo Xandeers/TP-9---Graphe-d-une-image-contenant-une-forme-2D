@@ -2,6 +2,7 @@
 #include <fstream>
 #include<cassert>
 #include<queue>
+#include <algorithm>
 #include"Image.h"
 
 using namespace std; 
@@ -23,15 +24,18 @@ Image::Image(){
     tab=new int[0];
 }
 
+Image::Image(int x, int y){
+    l=x;
+    c=y;
+    tab=new int[l*c];
+}
+
 Image::~Image(){
 
     if(tab!=nullptr){
         delete []tab;
     }
 }
-
-
-
 
 void Image::charger_image(const string &fichier){
     
@@ -102,6 +106,7 @@ void Image::charger_image(const string &fichier){
   }
 
 }
+
 void Image::sauvgarder_image(const string &fichier){
   
   std::ofstream ofs;
@@ -127,7 +132,6 @@ void Image::sauvgarder_image(const string &fichier){
 
   ofs.close();
 } 
-
 
 Etiquette* Image::tab_etat(){
 
@@ -172,7 +176,6 @@ int* Image::tab_dist(){
     }
     return dist;
 }
-
 
 void Image::algorithme_dijkstra(int* &dist, Etiquette* &etiquette, int* &pred){
 
@@ -255,6 +258,89 @@ void Image::construction_image_dist(int* &dist, Etiquette* &etiquette, int* &pre
     }
 }
 
+int Image::projection(const int &indice,int* &pred){
+
+if(indice<l*c){ //si image 3x3 on demande l'indice 12 probleme 
+
+    if(tab[indice]==0){ //si il s'agit d'un pixel noir 
+        return indice; 
+    }
+    else{
+        int buff=pred[indice];
+        while(tab[buff]!=0)
+        {
+            buff=pred[buff];
+        }
+        return buff;
+    }
+}
+else{
+
+    cout<<"attention le pixel demander et hors image"<<endl;
+    return -1; 
+}
+}
+
+int Image::projectionX_Y(const int &X, const int &Y, int* &pred){
+
+    return projection(X*c+Y,pred);
+}
+
+bool Image::img_de_dist(){
+    for(int i=0;i<l*c;i++){
+        if(tab[i]!=0 && tab[i]!=255){
+
+            return true;
+        }
+        
+    }
+    return false;
+}
+
+Image Image::union_image(Image &b){
+
+    
+    if(img_de_dist()==false)//si image 1 n'est pas une image de dist
+    {
+        int* distan = tab_dist();
+        int* prede = tab_pred();
+        Etiquette* etiqe =tab_etat();
+
+        algorithme_dijkstra(distan,etiqe,prede);
+        construction_image_dist(distan,etiqe,prede);
+        delete []distan;
+        delete []prede;
+        delete []etiqe;
+    }
+     if(b.img_de_dist()==false)//si image 2 n'est pas une image de dist
+    {
+        int* distan2 =b.tab_dist();
+        int* prede2 =b.tab_pred();
+        Etiquette* etiqe2 =b.tab_etat();
+
+        b.algorithme_dijkstra(distan2,etiqe2,prede2);
+        b.construction_image_dist(distan2,etiqe2,prede2);
+        delete []distan2;
+        delete []prede2;
+        delete []etiqe2;
+    }
+    //maintenant dans peu importe les image choisie ont a deux image de distance
+    
+    Image uni(l,c);
+
+    for( int i =0;i<l*c ;i++){
+        if(tab[i]==0 || b.tab[i]==0){//si l'un des deux fait partie de la forme donc pixel noir 
+
+            uni.tab[i]=0;
+        }
+        else{
+            uni.tab[i]=min(tab[i],b.tab[i]);
+        }
+    }
+    //maintenant uni est une image de l'union des deux 
+   return uni;
+}
+
 
 void Image::testRegression(){
 
@@ -267,7 +353,7 @@ void Image::testRegression(){
 
     cout<<"test charger image"<<endl;
     a.charger_image("./data/image_test_pgm.txt");
-    assert(a.c==3 && a.l == 2);
+    assert(a.c==5 && a.l == 3);
     assert(a.tab != nullptr);
     cout<<"ok"<<endl<<endl;
 
@@ -285,7 +371,7 @@ void Image::testRegression(){
     cout<<"test etiquette pour algo dijktra"<<endl;
     Etiquette* test = a.tab_etat();
     assert(test[0]== Blanc);
-    assert(test[4]==Noir);
+    assert(test[9]==Noir);
     delete[]test;
     cout<<"ok"<<endl<<endl;
 
@@ -293,7 +379,7 @@ void Image::testRegression(){
     cout<<"test predecesseur pour algo dijktra"<<endl;
     int* test2 = a.tab_pred();
     assert(test2[0]==-1 );
-    assert(test2[4]==4);
+    assert(test2[9]==9);
     delete[]test2;
     cout<<"ok"<<endl<<endl;
 
@@ -301,26 +387,25 @@ void Image::testRegression(){
     cout<<"test dist pour algo dijktra"<<endl;
     int* test3 = a.tab_dist();
     assert(test3[0]==100000 );
-    assert(test3[4]==0);
+    assert(test3[9]==0);
     delete[]test3;
     cout<<"ok"<<endl<<endl;
 
 
-    cout<<"test disjsktra"<<endl;
+    cout<<"test disjsktra + affichage des 10 premier"<<endl;
     Image c; 
     c.charger_image("./data/test.pgm"); 
     int *dist=c.tab_dist();
    Etiquette* etiq= c.tab_etat();
     int* pred=c.tab_pred();
     c.algorithme_dijkstra(dist,etiq,pred);
-    for(int i =0; i<c.l* c.c;i++){
+    for(int i =0; i<10;i++){
         cout<<"indice "<<i<<"= "<<dist[i]<<'\t'<<"pred ="<<pred[i]<<endl;
      }
      delete []dist;
      delete []etiq;
      delete []pred; 
-
-    cout<<"ok"<<endl<<endl; //pas de assert mais verifier plusieur fois avec des tab de taille diff
+     cout<<"ok"<<endl<<endl; //pas de assert mais verifier plusieur fois avec des tab de taille diff
 
 
     cout<<"test construction image distance"<<endl;
@@ -336,7 +421,54 @@ void Image::testRegression(){
      delete []dist2;
      delete []etiq2;
      delete []pred2; 
-    
+     cout<<"ok"<<endl<<endl;
+
+     
+     cout<<"Test projection de pixel"<<endl;
+     Image x; 
+     x.charger_image("./data/test2_img_dist.pgm");
+     int* dist3=x.tab_dist();
+     int* pred3 =x.tab_pred();
+     Etiquette* etiq3 =x.tab_etat();
+     x.algorithme_dijkstra(dist3,etiq3,pred3); //pour la projection il n'y a pas besoin forcement de construire l'image de distance donc moins "complexe","energivore"
+    int qqc = x.projection(189,pred3);
+    int qqc2 = x.projection(190,pred3);
+    assert(qqc == 190);
+    assert(qqc2 == 190);
+    cout<<"ok"<<endl<<endl;
+
+
+    cout<<"Test projection de pixel X et Y"<<endl;
+    int coordoner = x.projectionX_Y(6,9,pred3);
+    assert(coordoner==190);
+    cout<<"ok"<<endl<<endl;
+    delete []dist3;
+    delete []pred3;
+    delete []etiq3;
+
+    cout<<"test fonction booleen"<<endl;
+    Image g;
+    g.charger_image("./data/test2_img_dist.pgm");
+    assert(g.img_de_dist()==false);
+     int* dist4=g.tab_dist();
+     int* pred4 =g.tab_pred();
+     Etiquette* etiq4 =g.tab_etat();
+     g.algorithme_dijkstra(dist4,etiq4,pred4);
+     assert(g.img_de_dist()==false);
+     g.construction_image_dist(dist4,etiq4,pred4);
+     assert(g.img_de_dist()==true);
+     cout<<"ok"<<endl<<endl;
+
+
+    cout<<"Test Union"<<endl;
+    Image n;
+    n.charger_image("./data/image_union.pgm");
+    Image m;
+    m.charger_image("./data/image_test_pgm.txt");
+    Image union_forme= n.union_image(m);
+    assert(union_forme.tab[9]==0 && union_forme.tab[11]==0);
+    union_forme.sauvgarder_image("./data/image_union_dist.pgm");
+    cout<<"ok"<<endl;
 
 
 

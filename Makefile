@@ -29,4 +29,4 @@ $(BIN_DIR)/main: $(OBJ_DIR)/Main.o $(OBJ_DIR)/Image.o $(OBJ_DIR)/menu.o
 	g++ $(OBJ_DIR)/Main.o $(OBJ_DIR)/Image.o $(OBJ_DIR)/menu.o -o $(BIN_DIR)/main
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/test
+	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/test $(BIN_DIR)/main

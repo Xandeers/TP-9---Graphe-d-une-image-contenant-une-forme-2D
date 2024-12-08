@@ -41,6 +41,7 @@ string fichier;
 do {
 
 // Affichage du menu
+cout<<"effectuer ces etape une par une dans l'ordre!!!!!"<<endl;
 afficherCentre("======= MENU =======");
 cout<<endl<<endl;
 afficherCentre("1. Créer une image");

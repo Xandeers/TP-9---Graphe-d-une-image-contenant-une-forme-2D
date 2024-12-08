@@ -1,4 +1,8 @@
-il s'agit du projet de lifcomplexité
+il s'agit du projet de lifcomplexité à temps limité
+
+0) info:
+-le but de ce projet etait la realisation d'un module image pour utiliser la notion de graphe en c++
+ il etait demander de créer les fonction de chargement et sauvegarde d'image dans un fichier .pgm et l'utilisation de l'algorithme de Disjkstra pour le calcule des plus courte distance pour cree une image de distance (degradé). il fallait aussi cree un menu qui a pour objectif de montrer que nos fonction marche. Ici il sert juste de presentation des fonction un peu comme un test de regression
 
 
 1) Composition de l'archive :
